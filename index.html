@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador Assinatura de E-mail</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      padding: 20px; 
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input {
+      margin: 5px 0;
+      padding: 8px;
+      width: 250px;
+    }
+    #preview { 
+      margin-top: 20px; 
+      border: 1px solid #ccc; 
+    }
+    .buttons {
+      margin-top: 10px;
+    }
+    button, #download {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    button {
+      background: #00568f;
+      color: white;
+    }
+    button:hover {
+      background: #00294f;
+    }
+    #download {
+      background: #ffc300;
+      color: white;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    #download.active {
+      opacity: 100;
+      pointer-events: auto;
+    }
+    #download:hover {
+      background: #ac8400;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerar Assinatura de E-mail</h1>
+
+  <form id="formulario">
+    <input type="text" id="nome" placeholder="Nome"><br>
+    <input type="text" id="cargo" placeholder="Cargo"><br>
+    <input type="text" id="telefone" placeholder="Telefone"><br>
+    <input type="text" id="local" placeholder="Local"><br>
+    <input type="email" id="email" placeholder="E-mail"><br>
+    <input type="site" id="site" placeholder="Site  ex.: brn.com.br"><br><br>
+    
+    <div class="buttons">
+      <button type="button" onclick="gerarImagem()">Gerar Imagem</button>
+      <a id="download">Baixar Imagem</a>
+    </div>
+  </form>
+
+  <canvas id="preview" width="1541" height="399"></canvas><br>
+
+  <script>
+    function gerarImagem() {
+      const nome = document.getElementById("nome").value.trim();
+      const cargo = document.getElementById("cargo").value;
+      const telefone = document.getElementById("telefone").value;
+      const local = document.getElementById("local").value;
+      const email = document.getElementById("email").value;
+      const site = document.getElementById("site").value;
+      const canvas = document.getElementById("preview");
+      const ctx = canvas.getContext("2d");
+
+      const img = new Image();
+      img.src = "https://files.catbox.moe/av3zkt.png"; 
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        // nameStyle
+        ctx.font = "bold 36px Futura";
+        ctx.fillStyle = "white";
+        ctx.fillText(nome, 50, 100);
+
+        // otherText
+        ctx.font = "28px Futura Bk BT";
+        ctx.fillText(cargo, 290, 143);
+        ctx.fillText(telefone, 100, 200);
+        ctx.fillText(local, 100, 245);
+        ctx.fillText(email, 100, 290);
+        ctx.fillText(site, 100, 335);
+
+      
+        const link = document.getElementById("download");
+        link.href = canvas.toDataURL("canvas.png");
+
+      
+        const nomeArquivo = nome ? nome.replace(/\s+/g, "-").toLowerCase() + ".png" : "assinatura.png";
+        link.download = nomeArquivo;
+
+        link.classList.add("active");
+      };
+    }
+  </script>
+</body>
+</html>
